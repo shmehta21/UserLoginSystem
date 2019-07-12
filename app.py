@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import InputRequired, Email, Length
+from wtforms.validators import InputRequired, Email, Length, EqualTo
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -36,7 +36,8 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
 	email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
 	username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-	password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+	password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80), EqualTo('confirm', message='Passwords must match')])
+	confirm  = PasswordField('confirm password', validators=[InputRequired(), Length(min=8, max=80)])
 
 
 @app.route('/')
